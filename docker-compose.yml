@@ -1,0 +1,22 @@
+version: '2'
+services:
+  kotlin-dojo-back:
+    image: rodhabib/kotlin-dojo-back
+    depends_on:
+      - dojo-mysql-database
+    ports:
+    - "5000:5000"
+  dojo-mysql-database:
+    image: mariadb
+    container_name: dojo-mariadb
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: dojo-back
+      MYSQL_DATABASE: dojo-back
+      MYSQL_USER: dojo-back
+      MYSQL_PASSWORD: dojo-back
+    volumes:
+      - dojo-mariadb-volume:/var/lib/mysql
+volumes:
+  dojo-mariadb-volume:

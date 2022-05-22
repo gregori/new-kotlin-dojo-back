@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "spring.jpa.hibernate.dialect",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.hibernate.dialect."
+    },
+    {
+      "name": "spring.jpa.hibernate.naming.strategy",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.hibernate.naming.strategy."
+    },
+    {
+      "name": "spring.jpa.hibernate.format_sql",
+      "type": "java.lang.String",
+      "description": "Description for spring.jpa.hibernate.format_sql."
+    }
+  ] }

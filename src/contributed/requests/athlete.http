@@ -1,0 +1,138 @@
+### signup
+POST http://localhost:5000/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Rodrigo Gregori",
+  "username": "gregori",
+  "email": "rodrigo@gregori.eti.br",
+  "password": "c1v1l4d4",
+  "role": ["admin", "user"]
+}
+
+> {%
+   client.test("Request executed successfully", function() {
+       client.assert(response.status === 200, "Response status is not 200");
+   });
+ %}
+
+###
+POST http://localhost:5000/api/auth/signup
+Content-Type: application/json
+
+{
+  "name": "Instructor",
+  "username": "instructor",
+  "email": "instructor@gregori.eti.br",
+  "password": "c1v1l4d4",
+  "role": ["instructor", "user"]
+}
+
+> {%
+   client.test("Request executed successfully", function() {
+       client.assert(response.status === 200, "Response status is not 200");
+   });
+ %}
+
+
+### login
+POST http://localhost:5000/api/auth/signin
+Content-Type: application/json
+
+{
+  "username": "gregori",
+  "password": "c1v1l4d4"
+}
+
+> {%
+   client.global.set("auth_token", response.body.token);
+   client.log(response.body.token);
+   client.log(client.global.get("auth_token"));
+   client.test("Request executed successfully", function() {
+       client.assert(response.status === 200, "Response status is not 200");
+   });
+ %}
+
+### tests
+### All
+GET http://localhost:5000/api/test/all
+#Authorization: Bearer {{auth_token}}
+
+###
+GET http://localhost:5000/api/test/instructor
+Authorization: Bearer {{auth_token}}
+
+### Import
+POST http://localhost:5000/api/athletes/import
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Accept-Charset: utf-8
+Authorization: Bearer {{auth_token}}
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="athlete-import.csv"
+Content-Type: text/csv
+
+< ./athlete-import.csv
+--WebAppBoundary--
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### Get
+GET http://localhost:5000/athletes
+Accept-Charset: utf-8
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### Get one
+GET http://localhost:5000/athletes/1
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### Get one by register
+GET http://localhost:5000/athletes/search/findAthleteByRegister?register=397151
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### Get one active by register
+GET http://localhost:5000/athletes/search/findAthleteByRegisterAndEnabledIsTrue?register=397151
+
+> {%
+  client.test("Request executed successfully", function() {
+    client.assert(response.status === 200, "Response status is not 200");
+  });
+%}
+
+### Add one
+POST http://localhost:5000/athletes/
+Content-Type: application/json
+
+{
+  "register": "132191",
+  "name": "Alexandre Luís Thiago Aparício",
+  "contractorCpf": "193.279.719-06",
+  "dateOfBirth": "1998-02-03",
+  "email": "alexandreluisaparicio@tera.com.br",
+  "street": "Rua Cidade de Saquarema, 733",
+  "neighbourhood": "Profipo",
+  "city": "Joinville",
+  "state": "SC",
+  "zip": "89233-205",
+  "phone": "(47) 98358-1920",
+  "subscriptionDate": "2019-04-08"
+}
