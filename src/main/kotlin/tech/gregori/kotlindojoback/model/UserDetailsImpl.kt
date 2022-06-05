@@ -2,13 +2,12 @@ package tech.gregori.kotlindojoback.model
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import tech.gregori.kotlindojoback.model.User
 import java.util.stream.Collectors
 
 class UserDetailsImpl(private val user: User) : UserDetails {
 
     val id get() = user.id
-
+    val name get() = user.name
     val email get() = user.email
 
     override fun getAuthorities(): MutableList<SimpleGrantedAuthority> = user.roles.stream().map {

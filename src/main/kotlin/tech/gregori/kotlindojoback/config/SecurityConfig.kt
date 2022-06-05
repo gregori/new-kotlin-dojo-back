@@ -15,8 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import tech.gregori.kotlindojoback.filter.AuthTokenFilter
-import tech.gregori.kotlindojoback.filter.JWTAuthenticationFilter
 import tech.gregori.kotlindojoback.service.UserDetailsServiceImpl
 import tech.gregori.kotlindojoback.util.AuthenticationEntryPointJwt
 import tech.gregori.kotlindojoback.util.JWTUtil
@@ -28,9 +30,6 @@ import java.security.Key
 class SecurityConfig : WebSecurityConfigurerAdapter() {
     @Autowired
     private lateinit var userDetailsService: UserDetailsServiceImpl
-
-    @Autowired
-    private lateinit var jwtUtil: JWTUtil
 
     @Autowired
     private lateinit var unauthorizedHandler: AuthenticationEntryPointJwt
@@ -47,6 +46,18 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter::class.java)
+    }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("http://localhost:3000")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH")
+        configuration.allowedHeaders = listOf("authorization", "content-type", "x-auth-token", "x-total-count", "range")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+
+        return source
     }
 
     @Bean

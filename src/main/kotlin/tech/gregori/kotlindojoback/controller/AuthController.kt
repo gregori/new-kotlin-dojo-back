@@ -46,7 +46,7 @@ class AuthController(
             .collect(Collectors.toList())
 
         return ResponseEntity.ok(JwtResponse(jwt,
-            userDetails.id, userDetails.username, userDetails.email, roles))
+            userDetails.id, userDetails.username, userDetails.name, userDetails.email, roles))
     }
 
     @PostMapping("/signup")

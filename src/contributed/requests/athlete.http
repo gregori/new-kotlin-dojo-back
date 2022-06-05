@@ -82,8 +82,9 @@ Content-Type: text/csv
 %}
 
 ### Get
-GET http://localhost:5000/athletes
+GET http://localhost:5000/api/athletes
 Accept-Charset: utf-8
+Authorization: Bearer {{auth_token}}
 
 > {%
   client.test("Request executed successfully", function() {

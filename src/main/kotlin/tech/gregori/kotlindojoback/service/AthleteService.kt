@@ -12,4 +12,8 @@ class AthleteService(
 ) {
     fun import(file: MultipartFile): Collection<Athlete> =
         athleteImportService.import(file).also { athleteRepository.saveAll(it) }
+
+    fun getAll(): Iterable<Athlete> = athleteRepository.findAll()
+
+    fun getManyById(idList: List<Int>): List<Athlete> = athleteRepository.findAllByIdIn(idList)
 }
